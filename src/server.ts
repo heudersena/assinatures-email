@@ -1,4 +1,3 @@
-import { Assinature_emailCrudResolver } from "./../prisma/generated/type-graphql/resolvers/crud/Assinature_email/Assinature_emailCrudResolver";
 import "reflect-metadata";
 import path from "path";
 
