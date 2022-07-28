@@ -20,9 +20,10 @@
         "zod-prisma": "^0.5.4"
     },
     "scripts": {
-        "dev": "set NODE_ENV=dev && ts-node-dev  --transpile-only --ignore-watch node_modules ./src/server.ts",
+        "dev": "ts-node-dev  --transpile-only --ignore-watch node_modules ./src/server.ts",
         "build": "tsc",
-        "start": "set NODE_ENV=production &&  node ./dist/src/server.js"
+        "start": "set NODE_ENV=production &&  node ./dist/src/server.js",
+        "gg": "npx prisma generate"
     },
     "dependencies": {
         "@prisma-korea/graphql-schema-generator": "^0.3.0",
@@ -35,10 +36,11 @@
         "ejs": "^3.1.8",
         "express": "^4.18.1",
         "express-ejs-layouts": "^2.5.1",
-        "graphql": "^16.5.0",
+        "graphql": "15.3.0",
         "graphql-fields": "^2.0.3",
         "graphql-scalars": "^1.17.0",
         "nunjucks": "^3.2.3",
+        "prisma": "^4.1.1",
         "prisma-class-generator": "^0.2.0",
         "prisma-joi-generator": "^0.2.0",
         "reflect-metadata": "^0.1.13",

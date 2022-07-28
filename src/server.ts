@@ -1,27 +1,51 @@
+import { Assinature_emailCrudResolver } from "./../prisma/generated/type-graphql/resolvers/crud/Assinature_email/Assinature_emailCrudResolver";
 import "reflect-metadata";
-import express, { Request, Response, NextFunction } from "express";
-import { resolve } from "node:path";
-import cors from "cors";
-import { router } from "./routes/index.routes";
-import expressejslayouts from "express-ejs-layouts";
+import path from "path";
 
-const app = express();
+import {
+    Resolver,
+    Query,
+    buildSchema,
+    FieldResolver,
+    Ctx,
+    Root,
+} from "type-graphql";
 
+import { ApolloServer } from "apollo-server";
 
-const dirPath =
-    process.env.NODE_ENV == "dev"
-        ? resolve(__dirname, "..", "public")
-        : resolve(__dirname, "..", "public");
+import { PrismaClient } from "@prisma/client";
 
+interface Context {
+    prisma: PrismaClient;
+}
 
-app.use("/static", express.static(dirPath));
+import { Assinature_email } from "../prisma/generated/type-graphql";
 
-app.use(express.json());
-app.use(cors());
-app.use(router);
+@Resolver((of) => Assinature_email)
+class AssinaturesEmail {
+    @Query((returns) => Assinature_email, { nullable: true })
+    async bestAssinature(
+        @Ctx() { prisma }: Context
+    ): Promise<Assinature_email[] | []> {
+        return await prisma.assinature_email.findMany({});
+    }
+}
 
-app.set("view engine", "html");
-app.set("views", resolve(__dirname, "views"));
-app.use(expressejslayouts);
+async function main() {
+    const schema = await buildSchema({
+        resolvers: [AssinaturesEmail],
+        emitSchemaFile: path.resolve(__dirname, "./generated-schema.graphql"),
+        validate: false,
+    });
 
-app.listen(80, () => console.log("server running http://localhost:3333"));
+    const prisma = new PrismaClient();
+
+    const server = new ApolloServer({
+        schema,
+        context: (): Context => ({ prisma }),
+    });
+    const { port } = await server.listen(4000);
+    console.log(`GraphQL is listening on ${port}!`);
+}
+
+main().catch(console.error);

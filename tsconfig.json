@@ -1,26 +1,11 @@
 {
     "compilerOptions": {
-        "target": "es2018",
-        "lib": ["es2018", "esnext.asynciterable"],
+        "target": "ES2018",
         "module": "commonjs",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
+        "lib": ["es2018"],
         "strict": true,
-        "skipLibCheck": true,
-        "allowJs": true,
-        "outDir": "./dist",
-        "rootDir": ".",
-        "baseUrl": ".",
-        "noImplicitAny": false,
-        "moduleResolution": "node",
-        "sourceMap": false,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "typeRoots": ["./src/@types", "node_modules/@types"]
-    },
-    "include": ["src/**/*"],
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+    }
 }

@@ -15,12 +15,6 @@ generator erd {
     output   = "../ERD.png"
 }
 
-// generator graphql {
-//     provider   = "graphql-schema-generator"
-//     output     = "../src/schemas"
-//     createCRUD = "true"
-// }
-
 generator typegraphql {
     provider = "typegraphql-prisma"
     output   = "../prisma/generated/type-graphql"
