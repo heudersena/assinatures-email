@@ -10,3 +10,15 @@ export { GroupByAssinature_emailResolver } from "./Assinature_email/GroupByAssin
 export { UpdateManyAssinature_emailResolver } from "./Assinature_email/UpdateManyAssinature_emailResolver";
 export { UpdateOneAssinature_emailResolver } from "./Assinature_email/UpdateOneAssinature_emailResolver";
 export { UpsertOneAssinature_emailResolver } from "./Assinature_email/UpsertOneAssinature_emailResolver";
+export { AggregatePincturesResolver } from "./Pinctures/AggregatePincturesResolver";
+export { CreateManyPincturesResolver } from "./Pinctures/CreateManyPincturesResolver";
+export { CreateOnePincturesResolver } from "./Pinctures/CreateOnePincturesResolver";
+export { DeleteManyPincturesResolver } from "./Pinctures/DeleteManyPincturesResolver";
+export { DeleteOnePincturesResolver } from "./Pinctures/DeleteOnePincturesResolver";
+export { FindFirstPincturesResolver } from "./Pinctures/FindFirstPincturesResolver";
+export { FindManyPincturesResolver } from "./Pinctures/FindManyPincturesResolver";
+export { FindUniquePincturesResolver } from "./Pinctures/FindUniquePincturesResolver";
+export { GroupByPincturesResolver } from "./Pinctures/GroupByPincturesResolver";
+export { UpdateManyPincturesResolver } from "./Pinctures/UpdateManyPincturesResolver";
+export { UpdateOnePincturesResolver } from "./Pinctures/UpdateOnePincturesResolver";
+export { UpsertOnePincturesResolver } from "./Pinctures/UpsertOnePincturesResolver";

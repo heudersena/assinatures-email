@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BoolFieldUpdateOperationsInput } from "../inputs/BoolFieldUpdateOperationsInput";
 import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
+import { PincturesUpdateManyWithoutAssinatureIdNestedInput } from "../inputs/PincturesUpdateManyWithoutAssinatureIdNestedInput";
 import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
 
 @TypeGraphQL.InputType("Assinature_emailUpdateInput", {
@@ -44,4 +45,9 @@ export class Assinature_emailUpdateInput {
     nullable: true
   })
   updated_at?: DateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => PincturesUpdateManyWithoutAssinatureIdNestedInput, {
+    nullable: true
+  })
+  pinctures?: PincturesUpdateManyWithoutAssinatureIdNestedInput | undefined;
 }

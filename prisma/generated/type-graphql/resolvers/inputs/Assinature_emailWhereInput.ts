@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BoolFilter } from "../inputs/BoolFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
+import { PincturesListRelationFilter } from "../inputs/PincturesListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
 
 @TypeGraphQL.InputType("Assinature_emailWhereInput", {
@@ -59,4 +60,9 @@ export class Assinature_emailWhereInput {
     nullable: true
   })
   updated_at?: DateTimeFilter | undefined;
+
+  @TypeGraphQL.Field(_type => PincturesListRelationFilter, {
+    nullable: true
+  })
+  pinctures?: PincturesListRelationFilter | undefined;
 }

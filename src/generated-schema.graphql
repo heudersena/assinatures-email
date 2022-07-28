@@ -13,14 +13,26 @@ type AggregateAssinature_email {
   _min: Assinature_emailMinAggregate
 }
 
+type AggregatePinctures {
+  _count: PincturesCountAggregate
+  _max: PincturesMaxAggregate
+  _min: PincturesMinAggregate
+}
+
 type Assinature_email {
+  _count: Assinature_emailCount
   alreadyupdated: Boolean!
   created_at: DateTime!
   email: String!
   id: String!
   name: String!
   password: String!
+  pinctures(cursor: PincturesWhereUniqueInput, distinct: [PincturesScalarFieldEnum!], orderBy: [PincturesOrderByWithRelationInput!], skip: Int, take: Int, where: PincturesWhereInput): [Pinctures!]!
   updated_at: DateTime!
+}
+
+type Assinature_emailCount {
+  pinctures: Int!
 }
 
 type Assinature_emailCountAggregate {
@@ -51,10 +63,32 @@ input Assinature_emailCreateInput {
   id: String
   name: String!
   password: String!
+  pinctures: PincturesCreateNestedManyWithoutAssinatureIdInput
   updated_at: DateTime
 }
 
 input Assinature_emailCreateManyInput {
+  alreadyupdated: Boolean
+  created_at: DateTime
+  email: String!
+  id: String
+  name: String!
+  password: String!
+  updated_at: DateTime
+}
+
+input Assinature_emailCreateNestedOneWithoutPincturesInput {
+  connect: Assinature_emailWhereUniqueInput
+  connectOrCreate: Assinature_emailCreateOrConnectWithoutPincturesInput
+  create: Assinature_emailCreateWithoutPincturesInput
+}
+
+input Assinature_emailCreateOrConnectWithoutPincturesInput {
+  create: Assinature_emailCreateWithoutPincturesInput!
+  where: Assinature_emailWhereUniqueInput!
+}
+
+input Assinature_emailCreateWithoutPincturesInput {
   alreadyupdated: Boolean
   created_at: DateTime
   email: String!
@@ -137,7 +171,13 @@ input Assinature_emailOrderByWithRelationInput {
   id: SortOrder
   name: SortOrder
   password: SortOrder
+  pinctures: PincturesOrderByRelationAggregateInput
   updated_at: SortOrder
+}
+
+input Assinature_emailRelationFilter {
+  is: Assinature_emailWhereInput
+  isNot: Assinature_emailWhereInput
 }
 
 enum Assinature_emailScalarFieldEnum {
@@ -170,6 +210,7 @@ input Assinature_emailUpdateInput {
   id: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   password: StringFieldUpdateOperationsInput
+  pinctures: PincturesUpdateManyWithoutAssinatureIdNestedInput
   updated_at: DateTimeFieldUpdateOperationsInput
 }
 
@@ -183,6 +224,31 @@ input Assinature_emailUpdateManyMutationInput {
   updated_at: DateTimeFieldUpdateOperationsInput
 }
 
+input Assinature_emailUpdateOneWithoutPincturesNestedInput {
+  connect: Assinature_emailWhereUniqueInput
+  connectOrCreate: Assinature_emailCreateOrConnectWithoutPincturesInput
+  create: Assinature_emailCreateWithoutPincturesInput
+  delete: Boolean
+  disconnect: Boolean
+  update: Assinature_emailUpdateWithoutPincturesInput
+  upsert: Assinature_emailUpsertWithoutPincturesInput
+}
+
+input Assinature_emailUpdateWithoutPincturesInput {
+  alreadyupdated: BoolFieldUpdateOperationsInput
+  created_at: DateTimeFieldUpdateOperationsInput
+  email: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  password: StringFieldUpdateOperationsInput
+  updated_at: DateTimeFieldUpdateOperationsInput
+}
+
+input Assinature_emailUpsertWithoutPincturesInput {
+  create: Assinature_emailCreateWithoutPincturesInput!
+  update: Assinature_emailUpdateWithoutPincturesInput!
+}
+
 input Assinature_emailWhereInput {
   alreadyupdated: BoolFilter
   AND: [Assinature_emailWhereInput!]
@@ -193,6 +259,7 @@ input Assinature_emailWhereInput {
   NOT: [Assinature_emailWhereInput!]
   OR: [Assinature_emailWhereInput!]
   password: StringFilter
+  pinctures: PincturesListRelationFilter
   updated_at: DateTimeFilter
 }
 
@@ -253,12 +320,19 @@ input DateTimeWithAggregatesFilter {
 
 type Mutation {
   createManyAssinature_email(data: [Assinature_emailCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
+  createManyPinctures(data: [PincturesCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
   createOneAssinature_email(data: Assinature_emailCreateInput!): Assinature_email!
+  createOnePinctures(data: PincturesCreateInput!): Pinctures!
   deleteManyAssinature_email(where: Assinature_emailWhereInput): AffectedRowsOutput!
+  deleteManyPinctures(where: PincturesWhereInput): AffectedRowsOutput!
   deleteOneAssinature_email(where: Assinature_emailWhereUniqueInput!): Assinature_email
+  deleteOnePinctures(where: PincturesWhereUniqueInput!): Pinctures
   updateManyAssinature_email(data: Assinature_emailUpdateManyMutationInput!, where: Assinature_emailWhereInput): AffectedRowsOutput!
+  updateManyPinctures(data: PincturesUpdateManyMutationInput!, where: PincturesWhereInput): AffectedRowsOutput!
   updateOneAssinature_email(data: Assinature_emailUpdateInput!, where: Assinature_emailWhereUniqueInput!): Assinature_email
+  updateOnePinctures(data: PincturesUpdateInput!, where: PincturesWhereUniqueInput!): Pinctures
   upsertOneAssinature_email(create: Assinature_emailCreateInput!, update: Assinature_emailUpdateInput!, where: Assinature_emailWhereUniqueInput!): Assinature_email!
+  upsertOnePinctures(create: PincturesCreateInput!, update: PincturesUpdateInput!, where: PincturesWhereUniqueInput!): Pinctures!
 }
 
 input NestedBoolFilter {
@@ -310,6 +384,17 @@ input NestedIntFilter {
   notIn: [Int!]
 }
 
+input NestedIntNullableFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
 input NestedStringFilter {
   contains: String
   endsWith: String
@@ -320,6 +405,37 @@ input NestedStringFilter {
   lt: String
   lte: String
   not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableWithAggregatesFilter {
+  _count: NestedIntNullableFilter
+  _max: NestedStringNullableFilter
+  _min: NestedStringNullableFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableWithAggregatesFilter
   notIn: [String!]
   startsWith: String
 }
@@ -341,12 +457,219 @@ input NestedStringWithAggregatesFilter {
   startsWith: String
 }
 
+type Pinctures {
+  assinature_emailId: String
+  assinatureId: Assinature_email
+  id: String!
+  path: String!
+}
+
+type PincturesCountAggregate {
+  _all: Int!
+  assinature_emailId: Int!
+  id: Int!
+  path: Int!
+}
+
+input PincturesCountOrderByAggregateInput {
+  assinature_emailId: SortOrder
+  id: SortOrder
+  path: SortOrder
+}
+
+input PincturesCreateInput {
+  assinatureId: Assinature_emailCreateNestedOneWithoutPincturesInput
+  id: String
+  path: String!
+}
+
+input PincturesCreateManyAssinatureIdInput {
+  id: String
+  path: String!
+}
+
+input PincturesCreateManyAssinatureIdInputEnvelope {
+  data: [PincturesCreateManyAssinatureIdInput!]!
+  skipDuplicates: Boolean
+}
+
+input PincturesCreateManyInput {
+  assinature_emailId: String
+  id: String
+  path: String!
+}
+
+input PincturesCreateNestedManyWithoutAssinatureIdInput {
+  connect: [PincturesWhereUniqueInput!]
+  connectOrCreate: [PincturesCreateOrConnectWithoutAssinatureIdInput!]
+  create: [PincturesCreateWithoutAssinatureIdInput!]
+  createMany: PincturesCreateManyAssinatureIdInputEnvelope
+}
+
+input PincturesCreateOrConnectWithoutAssinatureIdInput {
+  create: PincturesCreateWithoutAssinatureIdInput!
+  where: PincturesWhereUniqueInput!
+}
+
+input PincturesCreateWithoutAssinatureIdInput {
+  id: String
+  path: String!
+}
+
+type PincturesGroupBy {
+  _count: PincturesCountAggregate
+  _max: PincturesMaxAggregate
+  _min: PincturesMinAggregate
+  assinature_emailId: String
+  id: String!
+  path: String!
+}
+
+input PincturesListRelationFilter {
+  every: PincturesWhereInput
+  none: PincturesWhereInput
+  some: PincturesWhereInput
+}
+
+type PincturesMaxAggregate {
+  assinature_emailId: String
+  id: String
+  path: String
+}
+
+input PincturesMaxOrderByAggregateInput {
+  assinature_emailId: SortOrder
+  id: SortOrder
+  path: SortOrder
+}
+
+type PincturesMinAggregate {
+  assinature_emailId: String
+  id: String
+  path: String
+}
+
+input PincturesMinOrderByAggregateInput {
+  assinature_emailId: SortOrder
+  id: SortOrder
+  path: SortOrder
+}
+
+input PincturesOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input PincturesOrderByWithAggregationInput {
+  _count: PincturesCountOrderByAggregateInput
+  _max: PincturesMaxOrderByAggregateInput
+  _min: PincturesMinOrderByAggregateInput
+  assinature_emailId: SortOrder
+  id: SortOrder
+  path: SortOrder
+}
+
+input PincturesOrderByWithRelationInput {
+  assinature_emailId: SortOrder
+  assinatureId: Assinature_emailOrderByWithRelationInput
+  id: SortOrder
+  path: SortOrder
+}
+
+enum PincturesScalarFieldEnum {
+  assinature_emailId
+  id
+  path
+}
+
+input PincturesScalarWhereInput {
+  AND: [PincturesScalarWhereInput!]
+  assinature_emailId: StringNullableFilter
+  id: StringFilter
+  NOT: [PincturesScalarWhereInput!]
+  OR: [PincturesScalarWhereInput!]
+  path: StringFilter
+}
+
+input PincturesScalarWhereWithAggregatesInput {
+  AND: [PincturesScalarWhereWithAggregatesInput!]
+  assinature_emailId: StringNullableWithAggregatesFilter
+  id: StringWithAggregatesFilter
+  NOT: [PincturesScalarWhereWithAggregatesInput!]
+  OR: [PincturesScalarWhereWithAggregatesInput!]
+  path: StringWithAggregatesFilter
+}
+
+input PincturesUpdateInput {
+  assinatureId: Assinature_emailUpdateOneWithoutPincturesNestedInput
+  id: StringFieldUpdateOperationsInput
+  path: StringFieldUpdateOperationsInput
+}
+
+input PincturesUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  path: StringFieldUpdateOperationsInput
+}
+
+input PincturesUpdateManyWithoutAssinatureIdNestedInput {
+  connect: [PincturesWhereUniqueInput!]
+  connectOrCreate: [PincturesCreateOrConnectWithoutAssinatureIdInput!]
+  create: [PincturesCreateWithoutAssinatureIdInput!]
+  createMany: PincturesCreateManyAssinatureIdInputEnvelope
+  delete: [PincturesWhereUniqueInput!]
+  deleteMany: [PincturesScalarWhereInput!]
+  disconnect: [PincturesWhereUniqueInput!]
+  set: [PincturesWhereUniqueInput!]
+  update: [PincturesUpdateWithWhereUniqueWithoutAssinatureIdInput!]
+  updateMany: [PincturesUpdateManyWithWhereWithoutAssinatureIdInput!]
+  upsert: [PincturesUpsertWithWhereUniqueWithoutAssinatureIdInput!]
+}
+
+input PincturesUpdateManyWithWhereWithoutAssinatureIdInput {
+  data: PincturesUpdateManyMutationInput!
+  where: PincturesScalarWhereInput!
+}
+
+input PincturesUpdateWithoutAssinatureIdInput {
+  id: StringFieldUpdateOperationsInput
+  path: StringFieldUpdateOperationsInput
+}
+
+input PincturesUpdateWithWhereUniqueWithoutAssinatureIdInput {
+  data: PincturesUpdateWithoutAssinatureIdInput!
+  where: PincturesWhereUniqueInput!
+}
+
+input PincturesUpsertWithWhereUniqueWithoutAssinatureIdInput {
+  create: PincturesCreateWithoutAssinatureIdInput!
+  update: PincturesUpdateWithoutAssinatureIdInput!
+  where: PincturesWhereUniqueInput!
+}
+
+input PincturesWhereInput {
+  AND: [PincturesWhereInput!]
+  assinature_emailId: StringNullableFilter
+  assinatureId: Assinature_emailRelationFilter
+  id: StringFilter
+  NOT: [PincturesWhereInput!]
+  OR: [PincturesWhereInput!]
+  path: StringFilter
+}
+
+input PincturesWhereUniqueInput {
+  id: String
+}
+
 type Query {
   aggregateAssinature_email(cursor: Assinature_emailWhereUniqueInput, orderBy: [Assinature_emailOrderByWithRelationInput!], skip: Int, take: Int, where: Assinature_emailWhereInput): AggregateAssinature_email!
+  aggregatePinctures(cursor: PincturesWhereUniqueInput, orderBy: [PincturesOrderByWithRelationInput!], skip: Int, take: Int, where: PincturesWhereInput): AggregatePinctures!
   assinature_email(where: Assinature_emailWhereUniqueInput!): Assinature_email
   assinature_emails(cursor: Assinature_emailWhereUniqueInput, distinct: [Assinature_emailScalarFieldEnum!], orderBy: [Assinature_emailOrderByWithRelationInput!], skip: Int, take: Int, where: Assinature_emailWhereInput): [Assinature_email!]!
   findFirstAssinature_email(cursor: Assinature_emailWhereUniqueInput, distinct: [Assinature_emailScalarFieldEnum!], orderBy: [Assinature_emailOrderByWithRelationInput!], skip: Int, take: Int, where: Assinature_emailWhereInput): Assinature_email
+  findFirstPinctures(cursor: PincturesWhereUniqueInput, distinct: [PincturesScalarFieldEnum!], orderBy: [PincturesOrderByWithRelationInput!], skip: Int, take: Int, where: PincturesWhereInput): Pinctures
+  findManyPinctures(cursor: PincturesWhereUniqueInput, distinct: [PincturesScalarFieldEnum!], orderBy: [PincturesOrderByWithRelationInput!], skip: Int, take: Int, where: PincturesWhereInput): [Pinctures!]!
+  findUniquePinctures(where: PincturesWhereUniqueInput!): Pinctures
   groupByAssinature_email(by: [Assinature_emailScalarFieldEnum!]!, having: Assinature_emailScalarWhereWithAggregatesInput, orderBy: [Assinature_emailOrderByWithAggregationInput!], skip: Int, take: Int, where: Assinature_emailWhereInput): [Assinature_emailGroupBy!]!
+  groupByPinctures(by: [PincturesScalarFieldEnum!]!, having: PincturesScalarWhereWithAggregatesInput, orderBy: [PincturesOrderByWithAggregationInput!], skip: Int, take: Int, where: PincturesWhereInput): [PincturesGroupBy!]!
 }
 
 enum QueryMode {
@@ -374,6 +697,39 @@ input StringFilter {
   lte: String
   mode: QueryMode
   not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableWithAggregatesFilter {
+  _count: NestedIntNullableFilter
+  _max: NestedStringNullableFilter
+  _min: NestedStringNullableFilter
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableWithAggregatesFilter
   notIn: [String!]
   startsWith: String
 }

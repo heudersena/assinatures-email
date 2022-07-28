@@ -3,12 +3,14 @@ import * as tslib from "tslib";
 import * as crudResolvers from "./resolvers/crud/resolvers-crud.index";
 import * as argsTypes from "./resolvers/crud/args.index";
 import * as actionResolvers from "./resolvers/crud/resolvers-actions.index";
+import * as relationResolvers from "./resolvers/relations/resolvers.index";
 import * as models from "./models";
 import * as outputTypes from "./resolvers/outputs";
 import * as inputTypes from "./resolvers/inputs";
 
 const crudResolversMap = {
-  Assinature_email: crudResolvers.Assinature_emailCrudResolver
+  Assinature_email: crudResolvers.Assinature_emailCrudResolver,
+  Pinctures: crudResolvers.PincturesCrudResolver
 };
 const actionResolversMap = {
   Assinature_email: {
@@ -24,10 +26,25 @@ const actionResolversMap = {
     updateManyAssinature_email: actionResolvers.UpdateManyAssinature_emailResolver,
     updateOneAssinature_email: actionResolvers.UpdateOneAssinature_emailResolver,
     upsertOneAssinature_email: actionResolvers.UpsertOneAssinature_emailResolver
+  },
+  Pinctures: {
+    aggregatePinctures: actionResolvers.AggregatePincturesResolver,
+    createManyPinctures: actionResolvers.CreateManyPincturesResolver,
+    createOnePinctures: actionResolvers.CreateOnePincturesResolver,
+    deleteManyPinctures: actionResolvers.DeleteManyPincturesResolver,
+    deleteOnePinctures: actionResolvers.DeleteOnePincturesResolver,
+    findFirstPinctures: actionResolvers.FindFirstPincturesResolver,
+    findManyPinctures: actionResolvers.FindManyPincturesResolver,
+    findUniquePinctures: actionResolvers.FindUniquePincturesResolver,
+    groupByPinctures: actionResolvers.GroupByPincturesResolver,
+    updateManyPinctures: actionResolvers.UpdateManyPincturesResolver,
+    updateOnePinctures: actionResolvers.UpdateOnePincturesResolver,
+    upsertOnePinctures: actionResolvers.UpsertOnePincturesResolver
   }
 };
 const crudResolversInfo = {
-  Assinature_email: ["aggregateAssinature_email", "createManyAssinature_email", "createOneAssinature_email", "deleteManyAssinature_email", "deleteOneAssinature_email", "findFirstAssinature_email", "assinature_emails", "assinature_email", "groupByAssinature_email", "updateManyAssinature_email", "updateOneAssinature_email", "upsertOneAssinature_email"]
+  Assinature_email: ["aggregateAssinature_email", "createManyAssinature_email", "createOneAssinature_email", "deleteManyAssinature_email", "deleteOneAssinature_email", "findFirstAssinature_email", "assinature_emails", "assinature_email", "groupByAssinature_email", "updateManyAssinature_email", "updateOneAssinature_email", "upsertOneAssinature_email"],
+  Pinctures: ["aggregatePinctures", "createManyPinctures", "createOnePinctures", "deleteManyPinctures", "deleteOnePinctures", "findFirstPinctures", "findManyPinctures", "findUniquePinctures", "groupByPinctures", "updateManyPinctures", "updateOnePinctures", "upsertOnePinctures"]
 };
 const argsInfo = {
   AggregateAssinature_emailArgs: ["where", "orderBy", "cursor", "take", "skip"],
@@ -41,7 +58,19 @@ const argsInfo = {
   GroupByAssinature_emailArgs: ["where", "orderBy", "by", "having", "take", "skip"],
   UpdateManyAssinature_emailArgs: ["data", "where"],
   UpdateOneAssinature_emailArgs: ["data", "where"],
-  UpsertOneAssinature_emailArgs: ["where", "create", "update"]
+  UpsertOneAssinature_emailArgs: ["where", "create", "update"],
+  AggregatePincturesArgs: ["where", "orderBy", "cursor", "take", "skip"],
+  CreateManyPincturesArgs: ["data", "skipDuplicates"],
+  CreateOnePincturesArgs: ["data"],
+  DeleteManyPincturesArgs: ["where"],
+  DeleteOnePincturesArgs: ["where"],
+  FindFirstPincturesArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
+  FindManyPincturesArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
+  FindUniquePincturesArgs: ["where"],
+  GroupByPincturesArgs: ["where", "orderBy", "by", "having", "take", "skip"],
+  UpdateManyPincturesArgs: ["data", "where"],
+  UpdateOnePincturesArgs: ["data", "where"],
+  UpsertOnePincturesArgs: ["where", "create", "update"]
 };
 
 type ResolverModelNames = keyof typeof crudResolversMap;
@@ -130,6 +159,54 @@ export function applyArgsTypesEnhanceMap(
   }
 }
 
+const relationResolversMap = {
+  Assinature_email: relationResolvers.Assinature_emailRelationsResolver,
+  Pinctures: relationResolvers.PincturesRelationsResolver
+};
+const relationResolversInfo = {
+  Assinature_email: ["pinctures"],
+  Pinctures: ["assinatureId"]
+};
+
+type RelationResolverModelNames = keyof typeof relationResolversMap;
+
+type RelationResolverActionNames<
+  TModel extends RelationResolverModelNames
+  > = keyof typeof relationResolversMap[TModel]["prototype"];
+
+export type RelationResolverActionsConfig<TModel extends RelationResolverModelNames>
+  = Partial<Record<RelationResolverActionNames<TModel> | "_all", MethodDecorator[]>>;
+
+export type RelationResolversEnhanceMap = {
+  [TModel in RelationResolverModelNames]?: RelationResolverActionsConfig<TModel>;
+};
+
+export function applyRelationResolversEnhanceMap(
+  relationResolversEnhanceMap: RelationResolversEnhanceMap,
+) {
+  for (const relationResolversEnhanceMapKey of Object.keys(relationResolversEnhanceMap)) {
+    const modelName = relationResolversEnhanceMapKey as keyof typeof relationResolversEnhanceMap;
+    const relationResolverTarget = relationResolversMap[modelName].prototype;
+    const relationResolverActionsConfig = relationResolversEnhanceMap[modelName]!;
+    if (relationResolverActionsConfig._all) {
+      const allActionsDecorators = relationResolverActionsConfig._all;
+      const relationResolverActionNames = relationResolversInfo[modelName as keyof typeof relationResolversInfo];
+      for (const relationResolverActionName of relationResolverActionNames) {
+        tslib.__decorate(allActionsDecorators, relationResolverTarget, relationResolverActionName, null);
+      }
+    }
+    const relationResolverActionsToApply = Object.keys(relationResolverActionsConfig).filter(
+      it => it !== "_all"
+    );
+    for (const relationResolverActionName of relationResolverActionsToApply) {
+      const decorators = relationResolverActionsConfig[
+        relationResolverActionName as keyof typeof relationResolverActionsConfig
+      ] as MethodDecorator[];
+      tslib.__decorate(decorators, relationResolverTarget, relationResolverActionName, null);
+    }
+  }
+}
+
 type TypeConfig = {
   class?: ClassDecorator[];
   fields?: FieldsConfig;
@@ -169,7 +246,8 @@ function applyTypeClassEnhanceConfig<
 }
 
 const modelsInfo = {
-  Assinature_email: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"]
+  Assinature_email: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
+  Pinctures: ["id", "path", "assinature_emailId"]
 };
 
 type ModelNames = keyof typeof models;
@@ -210,10 +288,16 @@ export function applyModelsEnhanceMap(modelsEnhanceMap: ModelsEnhanceMap) {
 const outputsInfo = {
   AggregateAssinature_email: ["_count", "_min", "_max"],
   Assinature_emailGroupBy: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at", "_count", "_min", "_max"],
+  AggregatePinctures: ["_count", "_min", "_max"],
+  PincturesGroupBy: ["id", "path", "assinature_emailId", "_count", "_min", "_max"],
   AffectedRowsOutput: ["count"],
+  Assinature_emailCount: ["pinctures"],
   Assinature_emailCountAggregate: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at", "_all"],
   Assinature_emailMinAggregate: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
-  Assinature_emailMaxAggregate: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"]
+  Assinature_emailMaxAggregate: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
+  PincturesCountAggregate: ["id", "path", "assinature_emailId", "_all"],
+  PincturesMinAggregate: ["id", "path", "assinature_emailId"],
+  PincturesMaxAggregate: ["id", "path", "assinature_emailId"]
 };
 
 type OutputTypesNames = keyof typeof outputTypes;
@@ -254,34 +338,72 @@ export function applyOutputTypesEnhanceMap(
 }
 
 const inputsInfo = {
-  Assinature_emailWhereInput: ["AND", "OR", "NOT", "id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
-  Assinature_emailOrderByWithRelationInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
+  Assinature_emailWhereInput: ["AND", "OR", "NOT", "id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at", "pinctures"],
+  Assinature_emailOrderByWithRelationInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at", "pinctures"],
   Assinature_emailWhereUniqueInput: ["id"],
   Assinature_emailOrderByWithAggregationInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at", "_count", "_max", "_min"],
   Assinature_emailScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
-  Assinature_emailCreateInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
-  Assinature_emailUpdateInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
+  PincturesWhereInput: ["AND", "OR", "NOT", "id", "path", "assinatureId", "assinature_emailId"],
+  PincturesOrderByWithRelationInput: ["id", "path", "assinatureId", "assinature_emailId"],
+  PincturesWhereUniqueInput: ["id"],
+  PincturesOrderByWithAggregationInput: ["id", "path", "assinature_emailId", "_count", "_max", "_min"],
+  PincturesScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "path", "assinature_emailId"],
+  Assinature_emailCreateInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at", "pinctures"],
+  Assinature_emailUpdateInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at", "pinctures"],
   Assinature_emailCreateManyInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
   Assinature_emailUpdateManyMutationInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
+  PincturesCreateInput: ["id", "path", "assinatureId"],
+  PincturesUpdateInput: ["id", "path", "assinatureId"],
+  PincturesCreateManyInput: ["id", "path", "assinature_emailId"],
+  PincturesUpdateManyMutationInput: ["id", "path"],
   StringFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "mode", "not"],
   BoolFilter: ["equals", "not"],
   DateTimeFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
+  PincturesListRelationFilter: ["every", "some", "none"],
+  PincturesOrderByRelationAggregateInput: ["_count"],
   Assinature_emailCountOrderByAggregateInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
   Assinature_emailMaxOrderByAggregateInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
   Assinature_emailMinOrderByAggregateInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
   StringWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "mode", "not", "_count", "_min", "_max"],
   BoolWithAggregatesFilter: ["equals", "not", "_count", "_min", "_max"],
   DateTimeWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not", "_count", "_min", "_max"],
+  Assinature_emailRelationFilter: ["is", "isNot"],
+  StringNullableFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "mode", "not"],
+  PincturesCountOrderByAggregateInput: ["id", "path", "assinature_emailId"],
+  PincturesMaxOrderByAggregateInput: ["id", "path", "assinature_emailId"],
+  PincturesMinOrderByAggregateInput: ["id", "path", "assinature_emailId"],
+  StringNullableWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "mode", "not", "_count", "_min", "_max"],
+  PincturesCreateNestedManyWithoutAssinatureIdInput: ["create", "connectOrCreate", "createMany", "connect"],
   StringFieldUpdateOperationsInput: ["set"],
   BoolFieldUpdateOperationsInput: ["set"],
   DateTimeFieldUpdateOperationsInput: ["set"],
+  PincturesUpdateManyWithoutAssinatureIdNestedInput: ["create", "connectOrCreate", "upsert", "createMany", "set", "disconnect", "delete", "connect", "update", "updateMany", "deleteMany"],
+  Assinature_emailCreateNestedOneWithoutPincturesInput: ["create", "connectOrCreate", "connect"],
+  Assinature_emailUpdateOneWithoutPincturesNestedInput: ["create", "connectOrCreate", "upsert", "disconnect", "delete", "connect", "update"],
+  NullableStringFieldUpdateOperationsInput: ["set"],
   NestedStringFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
   NestedBoolFilter: ["equals", "not"],
   NestedDateTimeFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
   NestedStringWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
   NestedIntFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
   NestedBoolWithAggregatesFilter: ["equals", "not", "_count", "_min", "_max"],
-  NestedDateTimeWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not", "_count", "_min", "_max"]
+  NestedDateTimeWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not", "_count", "_min", "_max"],
+  NestedStringNullableFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
+  NestedStringNullableWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
+  NestedIntNullableFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
+  PincturesCreateWithoutAssinatureIdInput: ["id", "path"],
+  PincturesCreateOrConnectWithoutAssinatureIdInput: ["where", "create"],
+  PincturesCreateManyAssinatureIdInputEnvelope: ["data", "skipDuplicates"],
+  PincturesUpsertWithWhereUniqueWithoutAssinatureIdInput: ["where", "update", "create"],
+  PincturesUpdateWithWhereUniqueWithoutAssinatureIdInput: ["where", "data"],
+  PincturesUpdateManyWithWhereWithoutAssinatureIdInput: ["where", "data"],
+  PincturesScalarWhereInput: ["AND", "OR", "NOT", "id", "path", "assinature_emailId"],
+  Assinature_emailCreateWithoutPincturesInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
+  Assinature_emailCreateOrConnectWithoutPincturesInput: ["where", "create"],
+  Assinature_emailUpsertWithoutPincturesInput: ["update", "create"],
+  Assinature_emailUpdateWithoutPincturesInput: ["id", "name", "email", "password", "alreadyupdated", "created_at", "updated_at"],
+  PincturesCreateManyAssinatureIdInput: ["id", "path"],
+  PincturesUpdateWithoutAssinatureIdInput: ["id", "path"]
 };
 
 type InputTypesNames = keyof typeof inputTypes;

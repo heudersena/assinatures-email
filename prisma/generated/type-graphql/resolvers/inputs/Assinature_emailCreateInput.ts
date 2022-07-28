@@ -2,6 +2,7 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { PincturesCreateNestedManyWithoutAssinatureIdInput } from "../inputs/PincturesCreateNestedManyWithoutAssinatureIdInput";
 
 @TypeGraphQL.InputType("Assinature_emailCreateInput", {
   isAbstract: true
@@ -41,4 +42,9 @@ export class Assinature_emailCreateInput {
     nullable: true
   })
   updated_at?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => PincturesCreateNestedManyWithoutAssinatureIdInput, {
+    nullable: true
+  })
+  pinctures?: PincturesCreateNestedManyWithoutAssinatureIdInput | undefined;
 }

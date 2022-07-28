@@ -2,6 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
+import { Pinctures } from "../models/Pinctures";
+import { Assinature_emailCount } from "../resolvers/outputs/Assinature_emailCount";
 
 @TypeGraphQL.ObjectType("Assinature_email", {
   isAbstract: true
@@ -41,4 +43,11 @@ export class Assinature_email {
     nullable: false
   })
   updated_at!: Date;
+
+  pinctures?: Pinctures[];
+
+  @TypeGraphQL.Field(_type => Assinature_emailCount, {
+    nullable: true
+  })
+  _count?: Assinature_emailCount | null;
 }

@@ -27,8 +27,16 @@ model assinature_email {
     password       String
     alreadyupdated Boolean @default(false)
 
-    created_at DateTime @default(now())
-    updated_at DateTime @default(now()) @updatedAt
+    created_at DateTime    @default(now())
+    updated_at DateTime    @default(now()) @updatedAt
+    pinctures  pinctures[]
 
     @@map("assinatures_email")
+}
+
+model pinctures {
+    id                 String            @id @default(uuid())
+    path               String
+    assinatureId       assinature_email? @relation(fields: [assinature_emailId], references: [id])
+    assinature_emailId String?
 }
