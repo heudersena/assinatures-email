@@ -22,7 +22,7 @@
     "scripts": {
         "dev": "ts-node-dev  --transpile-only --ignore-watch node_modules ./src/server.ts",
         "build": "tsc",
-        "start": "set NODE_ENV=production &&  node ./dist/src/server.js",
+        "start": "set NODE_ENV=production &&  node ./build/src/server.js",
         "gg": "npx prisma generate"
     },
     "dependencies": {
