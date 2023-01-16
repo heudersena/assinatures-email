@@ -24,4 +24,4 @@ app.set("view engine", "html");
 app.set("views", resolve(__dirname, "views"));
 app.use(expressejslayouts);
 
-app.listen(80, () => console.log("server running http://localhost:3333"));
+app.listen(4001, () => console.log("server running http://localhost:4001"));
